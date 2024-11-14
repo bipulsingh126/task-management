@@ -1,8 +1,11 @@
 import React from 'react'
+import Card from '../components/Home/Card.jsx'
 
 const Important = () => {
   return (
-    <div>Important</div>
+    <div>
+      <Card home={'false'} />
+    </div>
   )
 }
 

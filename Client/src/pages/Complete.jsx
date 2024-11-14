@@ -1,8 +1,11 @@
 import React from 'react'
+import Card from '../components/Home/Card.jsx'
 
 const Complete = () => {
   return (
-    <div>Complete</div>
+    <div>
+      <Card home={"false"} />
+    </div>
   )
 }
 

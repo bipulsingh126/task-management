@@ -10,7 +10,7 @@ import Incomplete from './pages/Incomplete.jsx';
 function App() {
   
   return (
-    <div className='bg-gray-900 text-white h-screen p-2'>
+    <div className='bg-gray-900 text-white h-screen p-2 relative ' >
       <Routes>
         <Route  path='/' element={<Home/>}> 
         <Route index element={<AllTask/>} /> 
