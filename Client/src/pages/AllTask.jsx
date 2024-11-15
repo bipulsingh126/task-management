@@ -13,7 +13,7 @@ const AllTask = () => {
             <IoIosAddCircleOutline className="text-4xl text-gray-400  hover:text-gray-100 transition-all  duration-300" />
           </button>
         </div>
-        <Card home={'true'} />
+        <Card home={'true'} setInputDiv={setInputDiv} />
       </div>
       <InputData inputDiv={inputDiv} setInputDiv={setInputDiv} />
     </>
