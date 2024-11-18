@@ -1,7 +1,8 @@
 import express from 'express'
 import cors from 'cors'
-import connectDB from './db.js'
 import dotenv from 'dotenv'
+import connectDB from './config/db.js'
+import userRouter from './routes/userRoute.js'
 
 const app = express()
 
@@ -12,10 +13,10 @@ app.use(cors())
 dotenv.config()
 
 //connect db
-connectDB()
-app.use('/', (req, res) => {
-  res.send('backend is running')
-})
+connectDB() 
+
+// api endpoint
+app.use('/api/v1', userRouter);
 
 const port = process.env.PORT || 3000
 
