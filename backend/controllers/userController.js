@@ -1,39 +1,46 @@
-import { usermodel } from '../model/user.js'
+import { usermodel } from "../model/user.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
+//signin
 const signIn = async (req, res) => {
   try {
-    const { username } = req.body
-    const { email } = req.body
-    const user = await usermodel.findOne({ username: username })
-    const existingUserByEmail = await usermodel.findOne({ email: email })
-    if (user) {
-      return res
-        .status(300)
-        .json({ success: false, message: 'User already exists' })
-    } else if (username.length < 4) {
-      return res.status(400).json({
-        success: false,
-        message: 'Username should be at least 4 characters long',
-      })
-    }
-    if (existingUserByEmail) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email already in use',
-      })
-    }
-    const newUser = new usermodel({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-    })
-    await newUser.save()
-    return res
+    const { email, username, password } = req.body;
+    const user = new usermodel({ email, username, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    const savedUser = await user.save();
+    res
       .status(200)
-      .json({ success: true, message: 'User created successfully' })
+      .json({ success: true, message: "User created", id: savedUser._id });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({ success: false, message: 'Server error' })
+    console.log(error);
+    res.status(500).json({ success: false, message: "user alredy exist" });
   }
-}
-export { signIn }
+};
+
+//login
+const loginUserController = async (req, res) => {
+  try {
+    const user = await usermodel.findOne({ email: req.body.email });
+    if (!user) {
+      res.status(400).json({ success: false, message: "User not found" });
+    }
+    const isPasswordMatch = bcrypt.compareSync(
+      req.body.password,
+      user.password
+    );
+    if (!isPasswordMatch) {
+      res.status(400).json({ success: false, message: "Invalid password" });
+    }
+    const { password, ...others } = user._doc;
+    res
+      .status(200)
+      .json({ success: true, message: "User logged in", ...others });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export { signIn, loginUserController };

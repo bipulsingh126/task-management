@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
@@ -14,10 +13,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  tasks: {
+  tasks: [{
     type: mongoose.Types.ObjectId,
     ref: 'task',
-  },
+  }],
 })
 
 export const usermodel = mongoose.model('User', userSchema);
