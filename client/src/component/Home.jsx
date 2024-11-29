@@ -1,0 +1,56 @@
+import React from "react";
+import { ArrowRight } from "react-feather";
+const Home = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="text-center">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
+            Organize You work and life , with
+            <span className="text-blue-600">Task Management</span>
+          </h1>
+          <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+            Become Focused , organized and calm with task Management . the
+            world's // #1 task manager app.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <a
+              href="/signup"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center"
+            >
+              Make to Task
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
+            <a
+              href="/learn-more"
+              className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300"
+            >
+              Learn More
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Call-to-Action Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-blue-600 rounded-xl text-white">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Join thousands of satisfied users and take your productivity to the
+            next level.
+          </p>
+          <a
+            href="/signup"
+            className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 inline-flex items-center"
+          >
+            Sign Up Now
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </a>
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default Home;
