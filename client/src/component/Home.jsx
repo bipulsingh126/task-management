@@ -1,5 +1,7 @@
 import React from "react";
 import { ArrowRight } from "react-feather";
+import { Link } from "react-router-dom";
+
 const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
@@ -15,19 +17,19 @@ const Home = () => {
             world's // #1 task manager app.
           </p>
           <div className="flex justify-center space-x-4">
-            <a
-              href="/signup"
+            <Link
+              to="/signup"
               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center"
             >
               Make to Task
               <ArrowRight className="ml-2 h-5 w-5" />
-            </a>
-            <a
-              href="/learn-more"
+            </Link>
+            <Link
+              to="/learn-more"
               className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300"
             >
               Learn More
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -40,13 +42,13 @@ const Home = () => {
             Join thousands of satisfied users and take your productivity to the
             next level.
           </p>
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
             className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 inline-flex items-center"
           >
             Sign Up Now
             <ArrowRight className="ml-2 h-5 w-5" />
-          </a>
+          </Link>
         </div>
       </section>
     </div>

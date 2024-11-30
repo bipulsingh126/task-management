@@ -17,7 +17,7 @@ const Navbar = () => {
           <div className="flex justify-between">
             <div className="flex space-x-7">
               <div>
-                <Link href="/" className="flex items-center py-4 px-2">
+                <Link to="/" className="flex items-center py-4 px-2">
                   <span className="font-semibold text-gray-500 text-lg flex items-center gap-2">
                     <FcParallelTasks className="text-2xl" /> Task Management
                   </span>
@@ -25,13 +25,21 @@ const Navbar = () => {
               </div>
               <div className="hidden md:flex items-center space-x-1">
                 <Link
-                  href="/"
+                  to="/"
                   className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
                 >
                   Home
                 </Link>
+
                 <Link
-                  href="/about"
+                  to="/task"
+                  className=" px-2 py-4 text-gray-500  font-semibold hover:bg-blue-400 transition duration-300"
+                >
+                  Task
+                </Link>
+
+                <Link
+                  to="/about"
                   className="py-4 px-2 text-gray-500 font-semibold hover:text-blue-500 transition duration-300"
                 >
                   About
@@ -39,17 +47,17 @@ const Navbar = () => {
               </div>
             </div>
             <div className="hidden md:flex items-center space-x-3">
-              <Link>
+              <Link to="/profile">
                 <FaUser className="text-xl text-gray-500 hover:text-blue-500 transition duration-300 cursor-pointer" />
               </Link>
               <Link
-                href="/login"
+                to="/login"
                 className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
               >
                 Log In
               </Link>
               <Link
-                href="/signup"
+                to="/signup"
                 className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
               >
                 Sign Up
@@ -73,16 +81,23 @@ const Navbar = () => {
           <ul className="">
             <li>
               <Link
-                href="/"
+                to="/"
                 className="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold"
               >
                 Home
               </Link>
             </li>
-            <li></li>
             <li>
               <Link
-                href="/about"
+                to="/task"
+                className="block text-sm px-2 py-4 text-white bg-blue-500 font-semibold"
+              >
+                Task
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
                 className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 About
@@ -91,7 +106,7 @@ const Navbar = () => {
             <li></li>
             <li>
               <Link
-                href="/login"
+                to="/login"
                 className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 Login
@@ -99,7 +114,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                href="/signup"
+                to="/signup"
                 className="block text-sm px-2 py-4 hover:bg-blue-500 transition duration-300"
               >
                 Sign Up
