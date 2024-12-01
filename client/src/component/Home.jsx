@@ -25,7 +25,7 @@ const Home = () => {
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
-              to="/learn-more"
+              to="/about"
               className="bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition duration-300"
             >
               Learn More

@@ -33,7 +33,7 @@ const Navbar = () => {
 
                 <Link
                   to="/task"
-                  className=" px-2 py-4 text-gray-500  font-semibold hover:bg-blue-400 transition duration-300"
+                  className=" px-2 py-4 text-gray-500  font-semibold hover:text-blue-400 transition duration-300"
                 >
                   Task
                 </Link>

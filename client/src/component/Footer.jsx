@@ -13,7 +13,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between">
           <p className="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
-            &copy; 2023 Task Management. All rights reserved.
+            &copy; 2024 Task Management. All rights reserved.
           </p>
         </div>
       </div>
