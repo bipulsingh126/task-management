@@ -1,8 +1,11 @@
 import React from "react";
 import { ArrowRight } from "react-feather";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
@@ -18,10 +21,10 @@ const Home = () => {
           </p>
           <div className="flex justify-center space-x-4">
             <Link
-              to="/signup"
+              to={isLoggedIn ? "/task" : "/signup"}
               className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 flex items-center"
             >
-              Make to Task
+              {isLoggedIn ? "Go to Tasks" : "Make to Task"}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
@@ -43,10 +46,10 @@ const Home = () => {
             next level.
           </p>
           <Link
-            to="/signup"
+            to={isLoggedIn ? "/task" : "/signup"}
             className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 inline-flex items-center"
           >
-            Sign Up Now
+            {isLoggedIn ? "Go to Tasks" : "Sign Up Now"}
             <ArrowRight className="ml-2 h-5 w-5" />
           </Link>
         </div>

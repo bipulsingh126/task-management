@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [inputs, setInputs] = useState({
     email: "",
@@ -51,6 +54,8 @@ const Login = () => {
         email: "",
         password: "",
       });
+      sessionStorage.setItem("id", inputs.email);
+      dispatch(authActions.login());
       navigate("/task");
     } catch (error) {
       const errorMessage =

@@ -1,15 +1,30 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { FcParallelTasks } from "react-icons/fc";
 import { FaUser } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { authActions } from "../store";
 
 const Navbar = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
   };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    dispatch(authActions.logout());
+    toast.success("User logged out successfully!");
+    navigate("/login");
+  };
+
   return (
     <div>
       <nav className="bg-white shadow-lg">
@@ -50,18 +65,32 @@ const Navbar = () => {
               <Link to="/profile">
                 <FaUser className="text-xl text-gray-500 hover:text-blue-500 transition duration-300 cursor-pointer" />
               </Link>
-              <Link
-                to="/login"
-                className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
-              >
-                Log In
-              </Link>
-              <Link
-                to="/signup"
-                className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
-              >
-                Sign Up
-              </Link>
+              {!isLoggedIn && (
+                <>
+                  <Link
+                    to="/login"
+                    className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-blue-500 hover:text-white transition duration-300"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+              {isLoggedIn && (
+                <>
+                  <button
+                    onClick={logout}
+                    className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
             </div>
             <div className="md:hidden flex items-center">
               <button
