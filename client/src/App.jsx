@@ -8,10 +8,13 @@ import Home from "./component/home";
 import Signup from "./component/Signup";
 import Login from "./component/Login";
 import Task from "./component/Task";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
+     <ToastContainer />
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -1,6 +1,6 @@
 import React from "react";
 
-const TaskCard = ({ title, body, id ,  delid}) => {
+const TaskCard = ({ title, body, onDelete, onEdit }) => {
   return (
     <div className="bg-white rounded-xl shadow-md hover:shadow-xl mt-4 border border-gray-100 transform transition-all duration-300 hover:-translate-y-1 hover:bg-gray-50">
       <div className="border-b border-gray-100 bg-gray-50/50 rounded-t-xl px-6 py-3">
@@ -14,7 +14,10 @@ const TaskCard = ({ title, body, id ,  delid}) => {
             {title}
           </h3>
           <div className="flex space-x-1 sm:space-x-2 shrink-0">
-            <button className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors duration-200 group">
+            <button
+              onClick={onEdit}
+              className="p-1.5 hover:bg-blue-50 rounded-lg transition-colors duration-200 group"
+            >
               <svg
                 className="w-5 h-5 text-blue-500 group-hover:text-blue-600"
                 fill="none"
@@ -29,7 +32,10 @@ const TaskCard = ({ title, body, id ,  delid}) => {
                 />
               </svg>
             </button>
-            <button onClick={()=> delid(id)} className="p-1.5 hover:bg-red-50 rounded-lg transition-colors duration-200 group">
+            <button
+              onClick={onDelete}
+              className="p-1.5 hover:bg-red-50 rounded-lg transition-colors duration-200 group"
+            >
               <svg
                 className="w-5 h-5 text-red-500 group-hover:text-red-600"
                 fill="none"
