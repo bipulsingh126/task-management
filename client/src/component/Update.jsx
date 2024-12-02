@@ -25,7 +25,7 @@ const Update = ({ initialTask, onUpdate, onClose }) => {
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md transform transition-all">
         <div className="border-b border-gray-100 bg-gray-50 rounded-t-xl px-6 py-3 flex justify-between items-center">
           <h2 className="text-xl font-semibold text-gray-800">Update Task</h2>
-          <button 
+          <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"
           >
@@ -77,7 +77,7 @@ const Update = ({ initialTask, onUpdate, onClose }) => {
 
         <div className="border-t border-gray-100 px-6 py-4 bg-gray-50 rounded-b-xl">
           <div className="flex justify-end space-x-3">
-            <button 
+            <button
               onClick={onClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             >
