@@ -106,7 +106,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li className="text-gray-400">Email: support@taskmanager.com</li>
               <li className="text-gray-400">Phone: (555) 123-4567</li>
-              <li className="text-gray-400">Location: Silicon Valley, CA</li>
+              <li className="text-gray-400">Location: kanpur uttar pradesh</li>
             </ul>
           </div>
         </div>
