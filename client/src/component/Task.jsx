@@ -75,27 +75,27 @@ const Task = () => {
     fetchTasks();
   }, [token]);
 
-const deleteTask = async (taskId) => {
-  try {
-    // Show confirmation dialog
-    if (!window.confirm("Are you sure you want to delete this task?")) {
-      return;
-    }
+  const deleteTask = async (taskId) => {
+    try {
+      // Show confirmation dialog
+      if (!window.confirm("Are you sure you want to delete this task?")) {
+        return;
+      }
 
-    const res = await axios.delete(`http://localhost:3000/api/v2/deletetask/${taskId}`);
-    
-    if (res.data.success) {
-      // Remove task from UI
-      setArray(prevTasks => prevTasks.filter(task => task._id !== taskId));
-      toast.success("Task deleted successfully");
-    } else {
-      toast.error(res.data.message || "Failed to delete task");
+      const res = await axios.delete(`http://localhost:3000/api/v2/deletetask/${taskId}`);
+      
+      if (res.data.success) {
+        // Remove task from UI
+        setArray(prevTasks => prevTasks.filter(task => task._id !== taskId));
+        toast.success("Task deleted successfully");
+      } else {
+        toast.error(res.data.message || "Failed to delete task");
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      toast.error(error.response?.data?.message || "Failed to delete task");
     }
-  } catch (error) {
-    console.error("Error deleting task:", error);
-    toast.error(error.response?.data?.message || "Failed to delete task");
-  }
-};  };
+  };
 
   const handleEdit = (index) => {
     setUpdateTaskIndex(index);
