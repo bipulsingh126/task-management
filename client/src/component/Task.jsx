@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TaskCard from "./TaskCard";
 import { toast } from "react-toastify";
 import Update from "./Update";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
 
 const Task = () => {
   const [input, setInput] = useState({
     title: "",
     body: "",
   });
+  const token = sessionStorage.getItem("id");
 
   const [array, setArray] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
@@ -18,27 +21,81 @@ const Task = () => {
     setInput({ ...input, [name]: value });
   };
 
-  const submit = () => {
-    if (input.title === "" || input.body === "") {
-      toast.error("title and description should not be empty");
-      return;
-    } else {
-      setArray([...array, input]);
-      setInput({
-        title: "",
-        body: "",
+  const submit = async () => {
+    try {
+      if (input.title === "" || input.body === "") {
+        toast.error("Title and description should not be empty");
+        return;
+      }
+
+      if (!token) {
+        toast.error("Please login first");
+        return;
+      }
+
+      const res = await axios.post("http://localhost:3000/api/v2/addtask", {
+        title: input.title,
+        body: input.body,
+        email: token
       });
-      toast.success("Task Added");
-      toast.error("Your task is not added! please signup first");
+
+      if (res.data.success) {
+        // Add the new task to the array
+        setArray([...array, res.data.task]);
+        
+        // Clear input fields
+        setInput({
+          title: "",
+          body: ""
+        });
+        toast.success(res.data.message);
+      } else {
+        toast.error(res.data.message || "Failed to add task");
+      }
+    } catch (error) {
+      console.error("Error adding task:", error);
+      toast.error(error.response?.data?.message || "Failed to add task");
     }
   };
 
-  const del = (id) => {
-    const newarray = array.filter((task, index) => index !== id);
-    setArray(newarray);
-    toast.success("Task Deleted");
-    toast.error("Your task is not deleted! please login first");
-  };
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        if (!token) return;
+        const res = await axios.get(`http://localhost:3000/api/v2/getalltasks/${token}`);
+        if (res.data.success) {
+          setArray(res.data.tasks);
+        }
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        toast.error("Failed to fetch tasks");
+      }
+    };
+
+    fetchTasks();
+  }, [token]);
+
+const deleteTask = async (taskId) => {
+  try {
+    // Show confirmation dialog
+    if (!window.confirm("Are you sure you want to delete this task?")) {
+      return;
+    }
+
+    const res = await axios.delete(`http://localhost:3000/api/v2/deletetask/${taskId}`);
+    
+    if (res.data.success) {
+      // Remove task from UI
+      setArray(prevTasks => prevTasks.filter(task => task._id !== taskId));
+      toast.success("Task deleted successfully");
+    } else {
+      toast.error(res.data.message || "Failed to delete task");
+    }
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    toast.error(error.response?.data?.message || "Failed to delete task");
+  }
+};  };
 
   const handleEdit = (index) => {
     setUpdateTaskIndex(index);
@@ -125,7 +182,7 @@ const Task = () => {
                   key={index}
                   title={item.title}
                   body={item.body}
-                  onDelete={() => del(index)}
+                  onDelete={() => deleteTask(item._id)}
                   onEdit={() => handleEdit(index)}
                 />
               ))}
