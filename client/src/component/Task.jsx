@@ -4,65 +4,38 @@ import { toast } from "react-toastify";
 import Update from "./Update";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Task = () => {
+  const navigate = useNavigate();
   const [input, setInput] = useState({
     title: "",
     body: "",
   });
   const token = sessionStorage.getItem("id");
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
   const [array, setArray] = useState([]);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [updateTaskIndex, setUpdateTaskIndex] = useState(null);
+
+  useEffect(() => {
+    if (!isLoggedIn || !token) {
+      toast.error("Please login first");
+      navigate("/login");
+      return;
+    }
+  }, [isLoggedIn, token, navigate]);
 
   const change = (e) => {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
 
-  const submit = async () => {
-    try {
-      if (input.title === "" || input.body === "") {
-        toast.error("Title and description should not be empty");
-        return;
-      }
-
-      if (!token) {
-        toast.error("Please login first");
-        return;
-      }
-
-      const res = await axios.post("http://localhost:3000/api/v2/addtask", {
-        title: input.title,
-        body: input.body,
-        email: token,
-      });
-
-      if (res.data.success) {
-        // Add the new task to the array
-        setArray([...array, res.data.task]);
-
-        // Clear input fields
-        setInput({
-          title: "",
-          body: "",
-        });
-        toast.success(res.data.message);
-      } else {
-        toast.error(res.data.message || "Failed to add task");
-      }
-    } catch (error) {
-      console.error("Error adding task:", error);
-      toast.error(error.response?.data?.message || "Failed to add task");
-    }
-  };
-
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        if (!token) {
-          toast.error("Please login first");
+        if (!isLoggedIn || !token) {
           return;
         }
 
@@ -82,58 +55,61 @@ const Task = () => {
     };
 
     fetchTasks();
-  }, [token]);
+  }, [token, isLoggedIn]);
 
-  const deleteTask = async (taskId) => {
+  const submit = async () => {
     try {
-      // Show confirmation dialog
-      if (!window.confirm("Are you sure you want to delete this task?")) {
+      if (!isLoggedIn || !token) {
+        toast.error("Please login first");
+        navigate("/login");
         return;
       }
 
-      const res = await axios.delete(
-        `http://localhost:3000/api/v2/deletetask/${taskId}`
-      );
+      if (input.title === "" || input.body === "") {
+        toast.error("Title and description should not be empty");
+        return;
+      }
+
+      const res = await axios.post("http://localhost:3000/api/v2/addtask", {
+        title: input.title,
+        body: input.body,
+        email: token,
+      });
 
       if (res.data.success) {
-        // Remove task from UI
-        setArray((prevTasks) =>
-          prevTasks.filter((task) => task._id !== taskId)
-        );
-        toast.success("Task deleted successfully");
-      } else {
-        toast.error(res.data.message || "Failed to delete task");
+        setArray([res.data.task, ...array]);
+        setInput({
+          title: "",
+          body: "",
+        });
+        toast.success(res.data.message);
       }
     } catch (error) {
-      console.error("Error deleting task:", error);
-      toast.error(error.response?.data?.message || "Failed to delete task");
+      console.error("Error adding task:", error);
+      toast.error(error.response?.data?.message || "Failed to add task");
     }
-  };
-
-  const handleEdit = (index) => {
-    setUpdateTaskIndex(index);
-    setIsUpdateModalOpen(true);
   };
 
   const handleUpdateTask = async (taskId, updatedData) => {
     try {
-      if (!token) {
+      if (!isLoggedIn || !token) {
         toast.error("Please login first");
+        navigate("/login");
         return;
       }
 
-      const res = await axios.put(`http://localhost:3000/api/v2/updatetask/${taskId}`, {
-        title: updatedData.title,
-        body: updatedData.body,
-        email: token
-      });
+      const res = await axios.put(
+        `http://localhost:3000/api/v2/updatetask/${taskId}`,
+        {
+          title: updatedData.title,
+          body: updatedData.body,
+          email: token,
+        }
+      );
 
       if (res.data.success) {
-        // Update the task in the array
-        setArray(prevArray => 
-          prevArray.map(task => 
-            task._id === taskId ? res.data.task : task
-          )
+        setArray((prevArray) =>
+          prevArray.map((task) => (task._id === taskId ? res.data.task : task))
         );
         setIsUpdateModalOpen(false);
         toast.success(res.data.message);
@@ -144,6 +120,33 @@ const Task = () => {
       console.error("Error updating task:", error);
       toast.error(error.response?.data?.message || "Failed to update task");
     }
+  };
+
+  const deleteTask = async (taskId) => {
+    try {
+      if (!isLoggedIn || !token) {
+        toast.error("Please login first");
+        navigate("/login");
+        return;
+      }
+
+      const res = await axios.delete(
+        `http://localhost:3000/api/v2/deletetask/${taskId}`
+      );
+
+      if (res.data.success) {
+        setArray((prevArray) => prevArray.filter((task) => task._id !== taskId));
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      toast.error(error.response?.data?.message || "Failed to delete task");
+    }
+  };
+
+  const handleEdit = (index) => {
+    setUpdateTaskIndex(index);
+    setIsUpdateModalOpen(true);
   };
 
   const openUpdateModal = (taskIndex) => {
@@ -169,6 +172,10 @@ const Task = () => {
     setIsUpdateModalOpen(false);
     setUpdateTaskIndex(null);
   };
+
+  if (!isLoggedIn || !token) {
+    return null; // Don't render anything if not logged in
+  }
 
   return (
     <>
@@ -248,7 +255,9 @@ const Task = () => {
         <div className="relative z-50">
           <Update
             initialTask={array[updateTaskIndex]}
-            onUpdate={(updatedTask) => handleUpdateTask(array[updateTaskIndex]._id, updatedTask)}
+            onUpdate={(updatedTask) =>
+              handleUpdateTask(array[updateTaskIndex]._id, updatedTask)
+            }
             onClose={handleCloseUpdateModal}
           />
         </div>
