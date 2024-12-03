@@ -42,8 +42,8 @@ const Home = () => {
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Get Started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied users and take your productivity to the
-            next level.
+            Sign up now and take control of your work and life with our powerful
+            task management solution.
           </p>
           <Link
             to={isLoggedIn ? "/task" : "/signup"}
