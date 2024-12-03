@@ -35,17 +35,27 @@ const addTask = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   try {
-    const email = req.params.email;
+    const email = req.params.id;
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
     const user = await usermodel.findOne({ email });
-    
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    const tasks = await taskmodel.find({ user: user._id });
-    return res.status(200).json({ success: true, tasks });
+    const tasks = await taskmodel.find({ user: user._id })
+      .sort({ createdAt: -1 })
+      .select('title body createdAt');
+
+    return res.status(200).json({ 
+      success: true, 
+      tasks,
+      message: "Tasks fetched successfully" 
+    });
   } catch (error) {
-    console.log(error);
+    console.error("Error in getAllTasks:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
@@ -54,24 +64,60 @@ const updateTask = async (req, res) => {
   try {
     const { title, body } = req.body;
     const taskId = req.params.id;
+    const userEmail = req.body.email;  // Get user email for verification
 
-    const task = await taskmodel.findByIdAndUpdate(
-      taskId,
-      { title, body },
-      { new: true }
-    );
-
-    if (!task) {
-      return res.status(404).json({ success: false, message: "Task not found" });
+    // Validate inputs
+    if (!title || !body) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Title and body are required" 
+      });
     }
+
+    // Find user by email
+    const user = await usermodel.findOne({ email: userEmail });
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "User not found" 
+      });
+    }
+
+    // Find task and verify ownership
+    const existingTask = await taskmodel.findById(taskId);
+    if (!existingTask) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Task not found" 
+      });
+    }
+
+    // Verify task belongs to user
+    if (existingTask.user.toString() !== user._id.toString()) {
+      return res.status(403).json({ 
+        success: false, 
+        message: "Not authorized to update this task" 
+      });
+    }
+
+    // Update the task
+    const updatedTask = await taskmodel.findByIdAndUpdate(
+      taskId,
+      { 
+        title, 
+        body,
+        updatedAt: new Date()
+      },
+      { new: true }
+    ).select('title body createdAt updatedAt');
 
     return res.status(200).json({ 
       success: true, 
       message: "Task updated successfully",
-      task
+      task: updatedTask
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error in updateTask:", error);
     return res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
