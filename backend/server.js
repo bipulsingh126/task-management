@@ -12,15 +12,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(express.json());
-app.use(cors());  
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? '*' : 'http://localhost:5173'
+}));
 
-
-app.use(express.static(path.resolve(__dirname, "client", "dist")));
-app.get("/", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
-})
-
-////configure env
+//configure env
 dotenv.config();
 
 //connect db
@@ -29,6 +25,19 @@ connectDB();
 // api endpoint
 app.use("/api/v1", router);
 app.use("/api/v2", taskRouter);
+
+// Serve static files
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(__dirname, "client", "dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+} else {
+  app.use(express.static(path.resolve(__dirname, "client", "dist")));
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "dist", "index.html"));
+  });
+}
 
 const port = process.env.PORT || 3000;
 
