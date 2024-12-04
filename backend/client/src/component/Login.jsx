@@ -48,7 +48,7 @@ const Login = () => {
     }
 
     try {
-      await axios.post("http://localhost:3000/api/v1/login", inputs);
+      await axios.post(`${window.location.origin}/api/v1/login`, inputs);
       toast.success("User logged in successfully!");
       setInputs({
         email: "",

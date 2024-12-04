@@ -40,7 +40,7 @@ const Task = () => {
         }
 
         const res = await axios.get(
-          `http://localhost:3000/api/v2/getalltasks/${token}`
+          `${window.location.origin}/api/v2/getalltasks/${token}`
         );
 
         if (res.data.success) {
@@ -70,7 +70,7 @@ const Task = () => {
         return;
       }
 
-      const res = await axios.post("http://localhost:3000/api/v2/addtask", {
+      const res = await axios.post(`${window.location.origin}/api/v2/addtask`, {
         title: input.title,
         body: input.body,
         email: token,
@@ -99,7 +99,7 @@ const Task = () => {
       }
 
       const res = await axios.put(
-        `http://localhost:3000/api/v2/updatetask/${taskId}`,
+        `${window.location.origin}/api/v2/updatetask/${taskId}`,
         {
           title: updatedData.title,
           body: updatedData.body,
@@ -131,7 +131,7 @@ const Task = () => {
       }
 
       const res = await axios.delete(
-        `http://localhost:3000/api/v2/deletetask/${taskId}`
+        `${window.location.origin}/api/v2/deletetask/${taskId}`
       );
 
       if (res.data.success) {
